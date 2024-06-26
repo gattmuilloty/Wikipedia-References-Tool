@@ -195,8 +195,7 @@ https://money.cnn.com/2010/09/10/markets/coffee_prices/index.htm
 https://web.archive.org/web/20120116203635/http://money.cnn.com/2010/09/10/markets/coffee_prices/index.htm
 https://web.archive.org/web/20120427112638/https://www.bloomberg.com/news/2012-02-14/coffee-futures-fall-to-lowest-in-14-months-commodities-at-close.html
 https://www.bloomberg.com/news/2012-02-14/coffee-futures-fall-to-lowest-in-14-months-commodities-at-close.html
-https://portaracqg.com/historical-futures-data/historical-coffee-intraday-futures-data-kca/
-https://web.archive.org/web/20220831023050/https://portaracqg.com/historical-futures-data/historical-coffee-intraday-futures-data-kca/
+https://portaracqg.com/futures/int/kca
 https://web.archive.org/web/20140710093301/http://www.teaandcoffee.net/0409/
 http://www.teaandcoffee.net/0409/
 https://books.google.com/books?id=kUu4DjBo4WQC&pg=PA50
@@ -273,6 +272,7 @@ https://web.archive.org/web/20161213224925/http://coffeefaq.com/site/node/22
 https://web.archive.org/web/20131124143904/https://ndb.nal.usda.gov/ndb/foods/show/4291
 https://web.archive.org/web/20131122090248/https://ndb.nal.usda.gov/ndb/foods/show/4290
 https://doi.org/10.1016%2Fj.joule.2019.04.005
+https://ui.adsabs.harvard.edu/abs/2019Joule...3.1464W
 https://doi.org/10.1088%2F1757-899X%2F830%2F2%2F022019
 https://ui.adsabs.harvard.edu/abs/2020MS&E..830b2019W
 https://www.worldcat.org/issn/1757-899X
