@@ -1,0 +1,114 @@
+# Library requirements
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+def getWikiReferences(pageName, contactEmail):
+
+    '''
+    Return the reference section of a Wikipedia page.
+
+    Args:
+        pageName (string): The title of the Wikipedia page.
+        contactEmail (string): Contact email used in header for page request.
+
+    Returns:
+        pandas.DataFrame: A dataframe containing the reference data of the Wikipedia page.
+    '''
+
+    url = 'https://en.wikipedia.org/wiki/' + pageName # URL for Wikipedia page
+    
+    headers = { 'User-Agent': f'DASC 690 - Summer 2024 ({contactEmail})' } # Set User-Agent
+
+    response = requests.get(url, headers = headers) # Make request for page
+
+    soup = BeautifulSoup(response.text, 'html.parser') # Parse HTML
+
+    spans = soup.find_all('span', class_ = 'reference-text') # Find all of the instances of the References container
+
+    texts = [span.get_text() for span in spans] # Get text for each reference
+
+    links = [[link.get('href') for link in span.find_all('a')] for span in spans] # Get links for each reference
+
+    df = pd.DataFrame(links) # Initialize data frame
+
+    df.insert(0, 'reference', texts) # Insert reference text to data frame
+
+    return(df)
+
+
+def getArchiveText(url, contactEmail):
+
+    '''
+    Return a URL's latest archived text.
+
+    Args:
+        url (string): The link to a website.
+        contactEmail (string): Contact email used in header for page request.
+
+    Returns:
+        string: Text from archive or 'None" if archive couldn't be found.
+
+    '''
+
+    apiURL = f'http://archive.org/wayback/available?url={url}' # API endpoint
+
+    headers = { 'User-Agent': f'DASC 690 - Summer 2024 ({contactEmail})' } # Set User-Agent
+
+    content = requests.get(apiURL, headers = headers).json() # Make request for archived site
+
+    if content['archived_snapshots']: # If an archived snapshot exists
+
+        closest = content['archived_snapshots']['closest'] # Get the closest/latest snapshot
+
+        if closest['available']: # If the closest/latest snapshot is available
+
+            closestURL = closest['url'] # Get the URL for the last snapshot
+
+            content = requests.get(closestURL, headers = headers) # Make request
+
+            soup = BeautifulSoup(content.text, 'html.parser') # Parse HTML
+
+            text = soup.get_text() # Get text data
+
+            text = text.replace('\n', '') # Remove line breaks
+
+            return text
+        
+        else:
+            return 'None'
+    else:
+        return 'None'
+    
+
+def googleSearch(query, APIkey, CSEid, numResults = 10):
+
+    '''
+    Return search results (links) from query.
+
+    Args:
+        query (string): Query for Google search.
+        APIkey (string): API key connected to Custom Search API.
+        CSEid (string): Programmable Search Engine ID. 
+        numResults (int): Max number of search results to return. 
+
+    Returns:
+        list: A list of links returned from the query.
+    '''
+
+    url = "https://www.googleapis.com/customsearch/v1" # API endpoint
+
+    params = {
+        'key': APIkey,
+        'cx': CSEid,
+        'q': query,
+        'num': numResults
+    }
+
+    response = requests.get(url, params = params) # Make request to endpoint
+
+    searchResults = response.json()
+
+    links = [item['link'] for item in searchResults.get('items', [])] # Get links of results
+
+    return links
