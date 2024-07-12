@@ -3,6 +3,8 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 def getWikiReferences(pageName, contactEmail):
 
@@ -184,3 +186,9 @@ def filterReferences(references):
     references = references[~references['status'].isin(codesToIgnore)].reset_index(drop=True)
 
     return(references)
+
+
+def cosineSim(text1, text2):
+    vectorizer = CountVectorizer().fit_transform([text1, text2])
+    vectors = vectorizer.toarray()
+    return cosine_similarity(vectors)[0][1]
