@@ -24,14 +24,16 @@ def main():
 
 
     for i in range(len(df)):
+        print('-----------------------------------------------\n')
         print('Reference URL  : ' + df['URL'][i])
         referenceText = getArchiveText(df['URL'][i], 'mattguilloty@gmail.com')
-        print('Reference Text : ' + df['reference'][i])
 
         if referenceText == 'None':
-            print('\nArchive text was not found.\n')
+            print('\n----- Archive text was not found. -----\n')
         else:
-            print('\nArchive text found!\n')
+            print('\n----- Archive text found! -----\n')
+
+        print('Reference Text : ' + df['reference'][i])
 
         if remove_sentences_with_words(df['reference'][i], ['Archived', 'Retrieved']) == '':
             newReference = referenceText
@@ -41,6 +43,8 @@ def main():
         print('Cleaned query  : ' + cleanedQuery)
         print('')
         print('Google Searches found from query:\n')
+
+        print('-----------------------------------------------\n')
 
         searchesFound = googleSearch(cleanedQuery, APIkey = 'AIzaSyCh7g_k2yvQ64SYzybSHaGclZZ7FwIcBKc', CSEid = '224392473af904558')
         searchesFound = [s for s in searchesFound if 'wikipedia' and 'pdf' not in s]
@@ -82,7 +86,7 @@ def main():
                     print('Levenshtein Distance: ', levenshteinDist(referenceText, text))
                     print('Euclidean Distance: ', euclidean_dist(referenceText, text))
 
-                print('')
+                print('\n-----------------------------------------------\n')
                 
 
 if __name__ == "__main__":
