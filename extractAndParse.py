@@ -5,6 +5,8 @@ import pandas as pd
 import time
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import Levenshtein
+from scipy.spatial import distance # For Euclidean Distance
 
 def getWikiReferences(pageName, contactEmail):
 
@@ -192,3 +194,16 @@ def cosineSim(text1, text2):
     vectorizer = CountVectorizer().fit_transform([text1, text2])
     vectors = vectorizer.toarray()
     return cosine_similarity(vectors)[0][1]
+
+def jaccard_index(text1, text2):
+    set1 = set(text1.split())
+    set2 = set(text2.split())
+    return len(set1.intersection(set2)) / len(set1.union(set2))
+
+def levenshteinDist(text1, text2):
+    return Levenshtein.distance(text1, text2)
+
+def euclidean_dist(text1, text2):
+    vectorizer = CountVectorizer().fit_transform([text1, text2])
+    vectors = vectorizer.toarray()
+    return distance.euclidean(vectors[0], vectors[1])
