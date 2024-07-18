@@ -47,7 +47,7 @@ def main():
         print('-----------------------------------------------\n')
 
         searchesFound = googleSearch(cleanedQuery, APIkey = 'AIzaSyCh7g_k2yvQ64SYzybSHaGclZZ7FwIcBKc', CSEid = '224392473af904558')
-        searchesFound = [s for s in searchesFound if 'wikipedia' and 'pdf' not in s]
+        searchesFound = [s for s in searchesFound if 'wikipedia' or 'pdf' not in s]
         for searchFound in searchesFound:
             response = requests.get(searchFound)
 
