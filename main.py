@@ -40,7 +40,7 @@ def main():
         else:
             newReference = remove_sentences_with_words(df['reference'][i], ['Archived', 'Retrieved'])
         cleanedQuery = summarize_text_sumy(newReference).replace('"', '')
-        print('Cleaned query  : ' + cleanedQuery)
+        print('Cleaned query : ' + cleanedQuery)
         print('')
         print('Google Searches found from query:\n')
 
