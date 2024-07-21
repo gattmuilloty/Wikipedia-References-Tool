@@ -41,7 +41,7 @@ def fixQuery(df, query, userContact):
     print('\nWikipedia Page Found!')
     print('URL: https://en.wikipedia.org/wiki/' + query + '\n')
 
-    return(df)
+    return(df, query)
 
 def summarize_text_sumy(text):
     '''

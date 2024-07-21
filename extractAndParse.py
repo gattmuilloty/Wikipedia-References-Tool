@@ -185,7 +185,11 @@ def filterReferences(references):
 
     codesToIgnore = [200, 201, 202, 206]
 
-    references = references[~references['status'].isin(codesToIgnore)].reset_index(drop=True)
+    # references = references[~references['status'].isin(codesToIgnore)].reset_index(drop=True)
+    references = references[~references['status'].isin(codesToIgnore)]
+
+
+    
 
     return(references)
 
