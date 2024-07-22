@@ -15,8 +15,6 @@ def main():
     totalURLsFound = len(df)
 
     df = filterReferences(df)
-    
-    badSiteIndexes = [x+1 for x in df.index.to_list()]
 
     if len(df) == 1:
         print('\n' + str(len(df)) + ' bad link found\n')
@@ -24,6 +22,8 @@ def main():
         print('\n0 bad links found\n :)\n')
     else:
         print('\n' + str(len(df)) + ' bad links found\n')
+
+    totalBadLinksFound = len(df)
 
     
     df = df.reset_index(drop=True)
@@ -34,10 +34,11 @@ def main():
     jaccardInd =[]
     levenshteinDis = []
     euclideanDis = []
-
     referenceTexts = []
     statuses = []
     descriptions = []
+    indexes = []
+    numCandidates = 0
 
     for i in range(len(df)):
         print('-----------------------------------------------\n')
@@ -66,7 +67,11 @@ def main():
         searchesFound = [s for s in searchesFound if 'wikipedia' not in s and 'pdf' not in s]
 
         for searchFound in searchesFound:
-            response = requests.get(searchFound)
+            try:
+                response = requests.get(searchFound)
+            except Exception as e:
+                continue
+
 
             if response.status_code == 200:
                 print(searchFound + '\n')
@@ -76,6 +81,8 @@ def main():
                 referenceTexts.append(df['reference'][i])
                 statuses.append(df['status'][i])
                 descriptions.append(df['description'][i])
+                indexes.append(df['index'][i])
+                numCandidates += 1
 
                 detected_encoding = chardet.detect(response.content)['encoding']
 
@@ -88,7 +95,7 @@ def main():
 
                 text_data = soup.get_text()
 
-                text = text_data.replace('\n', '') # Remove line breaks
+                text = text_data.replace('\n', '')
 
                 if referenceText == 'None':
                     cosSim.append(cosineSim(df['reference'][i], text))
@@ -120,6 +127,7 @@ def main():
                 print('\n-----------------------------------------------\n')
 
     newDf = pd.DataFrame({
+        'reference_number': indexes,
         'reference': referenceTexts,
         'URL': urlsToFix,
         'status': statuses,
@@ -129,8 +137,19 @@ def main():
         'jaccard_index': jaccardInd,
         'levenshtein_distance': levenshteinDis,
         'euclidean_distance': euclideanDis
-    }).to_csv('outputs/candidate_URLS_' + query + '.csv')
-                
+    }).to_csv('exports/wikipedia_reference_tool_candidate_URLs_' + query + '.csv', index = False)
+
+    print('*** Wikipedia Page Reference Tool is complete! ***\n')
+
+    print('                      SUMMARY:                    ')
+    print('--------------------------------------------------')
+    print('Number of Websites Checked: ' + str(totalURLsFound))
+    print('Number of Bad Links Found: ' + str(totalBadLinksFound))
+    print('Number of Candidate Replacement Sites Found: ' + str(numCandidates))
+
+    print('\nCandidate replacement sites can be found in:')
+    print('exports/wikipedia_reference_tool_candidate_URLs_' + query + '.csv\n')
+
 
 if __name__ == "__main__":
     main()

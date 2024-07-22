@@ -113,11 +113,14 @@ def googleSearch(query, APIkey, CSEid, numResults = 10):
         'num': numResults
     }
 
-    response = requests.get(url, params = params) # Make request to endpoint
+    try:
+        response = requests.get(url, params = params) # Make request to endpoint
 
-    searchResults = response.json()
+        searchResults = response.json()
 
-    links = [item['link'] for item in searchResults.get('items', [])] # Get links of results
+        links = [item['link'] for item in searchResults.get('items', [])] # Get links of results
+    except Exception as e:
+        links = []
 
     return links
 
@@ -147,12 +150,14 @@ def filterReferences(references):
 
     referenceText = []
     urls = []
+    indexes = []
 
     for index, row in references.iterrows():
         for i in range(len(row)):
             if 'http' in str(row.iloc[i]):
                 referenceText.append(row.iloc[0])
                 urls.append(row.iloc[i])
+                indexes.append(index)
 
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
 
@@ -166,8 +171,14 @@ def filterReferences(references):
     statuses = []
     description = []
 
+    indexes = [x + 1 for x in indexes]
+
     for i in range(len(urls)):
         status = get_status_code(urls[i])
+
+        # Try ERROR status again to attempt to retreive HTTP status code
+        if status == 'ERR':
+            status = get_status_code(urls[i])
 
         print('URL ' + str(i + 1).rjust(3) + '/' + str(len(urls)) + ' : ' + str(status) + ' - ' + statusCodes[status])
 
@@ -180,7 +191,8 @@ def filterReferences(references):
         'reference': referenceText,
         'URL': urls,
         'status': statuses,
-        'description': description
+        'description': description,
+        'index': indexes
     })
 
     codesToIgnore = [200, 201, 202, 206]
@@ -191,7 +203,7 @@ def filterReferences(references):
 
     
 
-    return(references)
+    return references
 
 
 def cosineSim(text1, text2):

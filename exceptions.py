@@ -37,6 +37,8 @@ def fixQuery(df, query, userContact):
 
         query = input('Enter Wikipedia page to query: ')
         df = getWikiReferences(query, userContact)
+
+    query = query.replace(' ', '_')
     
     print('\nWikipedia Page Found!')
     print('URL: https://en.wikipedia.org/wiki/' + query + '\n')
