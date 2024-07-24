@@ -1,5 +1,6 @@
 from extractAndParse import *
 from exceptions import *
+from similarityMeasures import *
 import chardet
 
 def main():
@@ -101,8 +102,8 @@ def main():
                     cosSim.append(cosineSim(df['reference'][i], text))
                     print('Cosine Similarity: '.rjust(22), cosineSim(df['reference'][i], text))
 
-                    jaccardInd.append(jaccard_index(df['reference'][i], text))
-                    print('Jaccard Index: '.rjust(22), jaccard_index(df['reference'][i], text))
+                    jaccardInd.append(jaccardIndex(df['reference'][i], text))
+                    print('Jaccard Index: '.rjust(22), jaccardIndex(df['reference'][i], text))
 
                     levenshteinDis.append(levenshteinDist(df['reference'][i], text))
                     print('Levenshtein Distance: '.rjust(22), levenshteinDist(df['reference'][i], text))
@@ -113,8 +114,8 @@ def main():
                     cosSim.append(cosineSim(referenceText, text))
                     print('Cosine Similarity: '.rjust(22), cosineSim(referenceText, text))
 
-                    jaccardInd.append(jaccard_index(referenceText, text))
-                    print('Jaccard Index: '.rjust(22), jaccard_index(referenceText, text))
+                    jaccardInd.append(jaccardIndex(referenceText, text))
+                    print('Jaccard Index: '.rjust(22), jaccardIndex(referenceText, text))
 
                     levenshteinDis.append(levenshteinDist(referenceText, text))
                     print('Levenshtein Distance: '.rjust(22), levenshteinDist(referenceText, text))
