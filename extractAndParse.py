@@ -113,6 +113,8 @@ def filterReferences(references):
     # Add 1 to each index for visual purposes
     indexes = [x + 1 for x in indexes]
 
+    totalURLS = len(urls)
+
     # For each URL found
     for i in range(len(urls)):
         status = get_status_code(urls[i])
@@ -143,7 +145,7 @@ def filterReferences(references):
     # Filter dataframe to only contain problematic HTTP status codes
     references = references[~references['status'].isin(codesToIgnore)]
 
-    return references
+    return references, totalURLS
 
 
 def getArchiveText(url, contactEmail):
@@ -234,7 +236,7 @@ def googleSearch(query, APIkey, CSEid, numResults = 10):
 
         # Get links of results
         links = [item['link'] for item in searchResults.get('items', [])]
-        
+
     except Exception as e:
         links = []
 

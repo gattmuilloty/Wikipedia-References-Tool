@@ -64,7 +64,6 @@ def summarize_text_sumy(text):
 import re
 from nltk.tokenize import sent_tokenize
 
-# Ensure you have the necessary nltk data for sentence tokenization
 import nltk
 nltk.download('punkt', quiet=True)
 

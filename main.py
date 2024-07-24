@@ -13,131 +13,135 @@ def main():
 
     df, query = fixQuery(df, wikiPageQuery, userContact)
 
-    totalURLsFound = len(df)
-
-    df = filterReferences(df)
-
-    if len(df) == 1:
-        print('\n' + str(len(df)) + ' bad link found\n')
-    elif len(df) == 0:
-        print('\n0 bad links found\n :)\n')
-    else:
-        print('\n' + str(len(df)) + ' bad links found\n')
+    df, totalURLsFound = filterReferences(df)
 
     totalBadLinksFound = len(df)
 
-    df = df.reset_index(drop=True)
+    def wumbo(df):
 
-    urlsToFix = []
-    candidateURLs = []
-    cosSim = []
-    jaccardInd =[]
-    levenshteinDis = []
-    euclideanDis = []
-    referenceTexts = []
-    statuses = []
-    descriptions = []
-    indexes = []
-    numCandidates = 0
-
-    # For each reference URL
-    for i in range(len(df)):
-        print('-----------------------------------------------\n')
-        print('Reference URL : ' + df['URL'][i])
-
-        # Get the text from the URL's archive (if available)
-        referenceText = getArchiveText(df['URL'][i], 'mattguilloty@gmail.com')
-
-        if referenceText == 'None':
-            print('\n----- Archive text was not found. -----\n')
+        if len(df) == 1:
+            print('\n' + str(len(df)) + ' bad link found\n')
+        elif len(df) == 0:
+            print('\n0 bad links found\n :)\n')
         else:
-            print('\n----- Archive text found! -----\n')
+            print('\n' + str(len(df)) + ' bad links found\n')
 
-        print('Reference Text : ' + df['reference'][i])
+        df = df.reset_index(drop=True)
 
-        # If the cleaned query returns nothing
-        if removeSentences(df['reference'][i], ['Archived', 'Retrieved']) == '':
-            newReference = referenceText
-        else:
-            newReference = removeSentences(df['reference'][i], ['Archived', 'Retrieved'])
+        urlsToFix = []
+        candidateURLs = []
+        cosSim = []
+        jaccardInd =[]
+        levenshteinDis = []
+        euclideanDis = []
+        referenceTexts = []
+        statuses = []
+        descriptions = []
+        indexes = []
+        numCandidates = 0
 
-        # Remove quotation marks from query
-        cleanedQuery = summarize_text_sumy(newReference).replace('"', '')
+        # For each reference URL
+        for i in range(len(df)):
+            print('-----------------------------------------------\n')
+            print('Reference URL : ' + df['URL'][i])
 
-        print('Cleaned query  : ' + cleanedQuery)
-        print('')
-        print('Candidate replacement websites found from query:\n')
+            # Get the text from the URL's archive (if available)
+            referenceText = getArchiveText(df['URL'][i], 'mattguilloty@gmail.com')
 
-        print('-----------------------------------------------\n')
+            if referenceText == 'None':
+                print('\n----- Archive text was not found. -----\n')
+            else:
+                print('\n----- Archive text found! -----\n')
 
-        # Make Google searches based on cleaned query
-        searchesFound = googleSearch(cleanedQuery, APIkey = 'AIzaSyCh7g_k2yvQ64SYzybSHaGclZZ7FwIcBKc', CSEid = '224392473af904558')
+            print('Reference Text : ' + df['reference'][i])
 
-        # Remove candidates that reference Wikipedia or are in PDF format
-        searchesFound = [s for s in searchesFound if 'wikipedia' not in s and 'pdf' not in s]
+            # If the cleaned query returns nothing
+            if removeSentences(df['reference'][i], ['Archived', 'Retrieved']) == '':
+                newReference = referenceText
+            else:
+                newReference = removeSentences(df['reference'][i], ['Archived', 'Retrieved'])
 
-        # For each candidate replacement URL found
-        for searchFound in searchesFound:
-            try:
-                response = requests.get(searchFound)
-            except Exception as e:
-                continue
+            # Remove quotation marks from query
+            cleanedQuery = summarize_text_sumy(newReference).replace('"', '')
 
-            # If the candidate URL works
-            if response.status_code == 200:
-                print(searchFound + '\n')
+            print('Cleaned query  : ' + cleanedQuery)
+            print('')
+            print('Candidate replacement websites found from query:\n')
 
-                urlsToFix.append(df['URL'][i])
-                candidateURLs.append(searchFound)
-                referenceTexts.append(df['reference'][i])
-                statuses.append(df['status'][i])
-                descriptions.append(df['description'][i])
-                indexes.append(df['index'][i])
-                numCandidates += 1
+            print('-----------------------------------------------\n')
 
-                detected_encoding = chardet.detect(response.content)['encoding']
+            # Make Google searches based on cleaned query
+            searchesFound = googleSearch(cleanedQuery, APIkey = 'AIzaSyCh7g_k2yvQ64SYzybSHaGclZZ7FwIcBKc', CSEid = '224392473af904558')
 
-                if detected_encoding is None:
-                    detected_encoding = 'utf-8'
+            # Remove candidates that reference Wikipedia or are in PDF format
+            searchesFound = [s for s in searchesFound if 'wikipedia' not in s and 'pdf' not in s]
 
-                response = response.content.decode(detected_encoding, errors='replace')
+            # For each candidate replacement URL found
+            for searchFound in searchesFound:
+                try:
+                    response = requests.get(searchFound)
+                except Exception as e:
+                    continue
 
-                soup = BeautifulSoup(response, 'html.parser')
+                # If the candidate URL works
+                if response.status_code == 200:
+                    print(searchFound + '\n')
 
-                text_data = soup.get_text()
+                    urlsToFix.append(df['URL'][i])
+                    candidateURLs.append(searchFound)
+                    referenceTexts.append(df['reference'][i])
+                    statuses.append(df['status'][i])
+                    descriptions.append(df['description'][i])
+                    indexes.append(df['index'][i])
+                    numCandidates += 1
 
-                # Remove line breaks in string
-                text = text_data.replace('\n', '')
+                    detected_encoding = chardet.detect(response.content)['encoding']
 
-                if referenceText == 'None':
-                    referenceText = df['reference'][i]
+                    if detected_encoding is None:
+                        detected_encoding = 'utf-8'
 
-                cosSim.append(cosineSim(referenceText, text))
-                print('Cosine Similarity: '.rjust(22), cosineSim(referenceText, text))
+                    response = response.content.decode(detected_encoding, errors='replace')
 
-                jaccardInd.append(jaccardIndex(referenceText, text))
-                print('Jaccard Index: '.rjust(22), jaccardIndex(referenceText, text))
+                    soup = BeautifulSoup(response, 'html.parser')
 
-                levenshteinDis.append(levenshteinDist(referenceText, text))
-                print('Levenshtein Distance: '.rjust(22), levenshteinDist(referenceText, text))
+                    text_data = soup.get_text()
 
-                euclideanDis.append(euclidean_dist(referenceText, text))
-                print('Euclidean Distance: '.rjust(22), euclidean_dist(referenceText, text))
+                    # Remove line breaks in string
+                    text = text_data.replace('\n', '')
 
-                print('\n-----------------------------------------------\n')
+                    if referenceText == 'None':
+                        referenceText = df['reference'][i]
 
-    newDf = pd.DataFrame({
-        'reference_number': indexes,
-        'reference': referenceTexts,
-        'URL': urlsToFix,
-        'status': statuses,
-        'description': descriptions,
-        'candidate_replacement_url': candidateURLs,
-        'cosine_similarity': cosSim,
-        'jaccard_index': jaccardInd,
-        'levenshtein_distance': levenshteinDis,
-        'euclidean_distance': euclideanDis
-    }).to_csv('exports/wikipedia_reference_tool_candidate_URLs_' + query + '.csv', index = False)
+                    cosSim.append(cosineSim(referenceText, text))
+                    print('Cosine Similarity: '.rjust(22), cosineSim(referenceText, text))
+
+                    jaccardInd.append(jaccardIndex(referenceText, text))
+                    print('Jaccard Index: '.rjust(22), jaccardIndex(referenceText, text))
+
+                    levenshteinDis.append(levenshteinDist(referenceText, text))
+                    print('Levenshtein Distance: '.rjust(22), levenshteinDist(referenceText, text))
+
+                    euclideanDis.append(euclidean_dist(referenceText, text))
+                    print('Euclidean Distance: '.rjust(22), euclidean_dist(referenceText, text))
+
+                    print('\n-----------------------------------------------\n')
+
+        pd.DataFrame({
+            'reference_number': indexes,
+            'reference': referenceTexts,
+            'URL': urlsToFix,
+            'status': statuses,
+            'description': descriptions,
+            'candidate_replacement_url': candidateURLs,
+            'cosine_similarity': cosSim,
+            'jaccard_index': jaccardInd,
+            'levenshtein_distance': levenshteinDis,
+            'euclidean_distance': euclideanDis
+        }).to_csv('exports/wikipedia_reference_tool_candidate_URLs_' + query + '.csv', index = False)
+
+        return numCandidates
+    
+    numCandidates = wumbo(df)
 
     print('*** Wikipedia Page Reference Tool is complete! ***\n')
 
