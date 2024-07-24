@@ -68,7 +68,7 @@ from nltk.tokenize import sent_tokenize
 import nltk
 nltk.download('punkt', quiet=True)
 
-def remove_sentences_with_words(text, exclude_words):
+def removeSentences(text, exclude_words):
     """
     Remove sentences containing specific words from the input text.
 

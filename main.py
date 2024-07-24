@@ -26,7 +26,6 @@ def main():
 
     totalBadLinksFound = len(df)
 
-    
     df = df.reset_index(drop=True)
 
     urlsToFix = []
@@ -41,9 +40,12 @@ def main():
     indexes = []
     numCandidates = 0
 
+    # For each reference URL
     for i in range(len(df)):
         print('-----------------------------------------------\n')
         print('Reference URL : ' + df['URL'][i])
+
+        # Get the text from the URL's archive (if available)
         referenceText = getArchiveText(df['URL'][i], 'mattguilloty@gmail.com')
 
         if referenceText == 'None':
@@ -53,27 +55,35 @@ def main():
 
         print('Reference Text : ' + df['reference'][i])
 
-        if remove_sentences_with_words(df['reference'][i], ['Archived', 'Retrieved']) == '':
+        # If the cleaned query returns nothing
+        if removeSentences(df['reference'][i], ['Archived', 'Retrieved']) == '':
             newReference = referenceText
         else:
-            newReference = remove_sentences_with_words(df['reference'][i], ['Archived', 'Retrieved'])
+            newReference = removeSentences(df['reference'][i], ['Archived', 'Retrieved'])
+
+        # Remove quotation marks from query
         cleanedQuery = summarize_text_sumy(newReference).replace('"', '')
+
         print('Cleaned query  : ' + cleanedQuery)
         print('')
         print('Candidate replacement websites found from query:\n')
 
         print('-----------------------------------------------\n')
 
+        # Make Google searches based on cleaned query
         searchesFound = googleSearch(cleanedQuery, APIkey = 'AIzaSyCh7g_k2yvQ64SYzybSHaGclZZ7FwIcBKc', CSEid = '224392473af904558')
+
+        # Remove candidates that reference Wikipedia or are in PDF format
         searchesFound = [s for s in searchesFound if 'wikipedia' not in s and 'pdf' not in s]
 
+        # For each candidate replacement URL found
         for searchFound in searchesFound:
             try:
                 response = requests.get(searchFound)
             except Exception as e:
                 continue
 
-
+            # If the candidate URL works
             if response.status_code == 200:
                 print(searchFound + '\n')
 
@@ -96,34 +106,23 @@ def main():
 
                 text_data = soup.get_text()
 
+                # Remove line breaks in string
                 text = text_data.replace('\n', '')
 
                 if referenceText == 'None':
-                    cosSim.append(cosineSim(df['reference'][i], text))
-                    print('Cosine Similarity: '.rjust(22), cosineSim(df['reference'][i], text))
+                    referenceText = df['reference'][i]
 
-                    jaccardInd.append(jaccardIndex(df['reference'][i], text))
-                    print('Jaccard Index: '.rjust(22), jaccardIndex(df['reference'][i], text))
+                cosSim.append(cosineSim(referenceText, text))
+                print('Cosine Similarity: '.rjust(22), cosineSim(referenceText, text))
 
-                    levenshteinDis.append(levenshteinDist(df['reference'][i], text))
-                    print('Levenshtein Distance: '.rjust(22), levenshteinDist(df['reference'][i], text))
+                jaccardInd.append(jaccardIndex(referenceText, text))
+                print('Jaccard Index: '.rjust(22), jaccardIndex(referenceText, text))
 
-                    euclideanDis.append(euclidean_dist(df['reference'][i], text))
-                    print('Euclidean Distance: '.rjust(22), euclidean_dist(df['reference'][i], text))
-                else:
-                    cosSim.append(cosineSim(referenceText, text))
-                    print('Cosine Similarity: '.rjust(22), cosineSim(referenceText, text))
+                levenshteinDis.append(levenshteinDist(referenceText, text))
+                print('Levenshtein Distance: '.rjust(22), levenshteinDist(referenceText, text))
 
-                    jaccardInd.append(jaccardIndex(referenceText, text))
-                    print('Jaccard Index: '.rjust(22), jaccardIndex(referenceText, text))
-
-                    levenshteinDis.append(levenshteinDist(referenceText, text))
-                    print('Levenshtein Distance: '.rjust(22), levenshteinDist(referenceText, text))
-
-                    euclideanDis.append(euclidean_dist(referenceText, text))
-                    print('Euclidean Distance: '.rjust(22), euclidean_dist(referenceText, text))
-
-                
+                euclideanDis.append(euclidean_dist(referenceText, text))
+                print('Euclidean Distance: '.rjust(22), euclidean_dist(referenceText, text))
 
                 print('\n-----------------------------------------------\n')
 
