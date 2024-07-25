@@ -83,4 +83,5 @@ def removeSentences(text, exclude_words):
         sentence for sentence in sentences
         if not any(re.search(r'\b' + word + r'\b', sentence, re.IGNORECASE) for word in exclude_words)
     ]
+    
     return " ".join(filtered_sentences)
