@@ -252,6 +252,48 @@ def googleSearch(query, APIkey, CSEid, numResults = 10):
 
     return links
 
+def summarize_text_sumy(text):
+    '''
+    Summarize the input text using Sumy.
+
+    Args:
+    text (str): The input text to summarize.
+    sentence_count (int): The number of sentences to return as the summary.
+
+    Returns:
+    str: The summarized text.
+    '''
+    parser = PlaintextParser.from_string(text, Tokenizer("english"))
+    summarizer = LsaSummarizer()
+    summary = summarizer(parser.document, 2)
+    return " ".join(str(sentence) for sentence in summary)
+
+import re
+from nltk.tokenize import sent_tokenize
+
+import nltk
+nltk.download('punkt', quiet=True)
+
+def removeSentences(text, exclude_words):
+    """
+    Remove sentences containing specific words from the input text.
+
+    Parameters:
+    text (str): The input text.
+    exclude_words (list): A list of words. Sentences containing any of these words will be removed.
+
+    Returns:
+    str: The text with specified sentences removed.
+    """
+    sentences = sent_tokenize(text)
+    filtered_sentences = [
+        sentence for sentence in sentences
+        if not any(re.search(r'\b' + word + r'\b', sentence, re.IGNORECASE) for word in exclude_words)
+    ]
+    
+    return " ".join(filtered_sentences)
+
+
 
 def wikipediaReferenceTool(df, query):
 
@@ -376,44 +418,3 @@ def wikipediaReferenceTool(df, query):
     }).to_csv('exports/wikipedia_reference_tool_candidate_URLs_' + query + '.csv', index = False)
 
     return numCandidates
-
-def summarize_text_sumy(text):
-    '''
-    Summarize the input text using Sumy.
-
-    Args:
-    text (str): The input text to summarize.
-    sentence_count (int): The number of sentences to return as the summary.
-
-    Returns:
-    str: The summarized text.
-    '''
-    parser = PlaintextParser.from_string(text, Tokenizer("english"))
-    summarizer = LsaSummarizer()
-    summary = summarizer(parser.document, 2)
-    return " ".join(str(sentence) for sentence in summary)
-
-import re
-from nltk.tokenize import sent_tokenize
-
-import nltk
-nltk.download('punkt', quiet=True)
-
-def removeSentences(text, exclude_words):
-    """
-    Remove sentences containing specific words from the input text.
-
-    Parameters:
-    text (str): The input text.
-    exclude_words (list): A list of words. Sentences containing any of these words will be removed.
-
-    Returns:
-    str: The text with specified sentences removed.
-    """
-    sentences = sent_tokenize(text)
-    filtered_sentences = [
-        sentence for sentence in sentences
-        if not any(re.search(r'\b' + word + r'\b', sentence, re.IGNORECASE) for word in exclude_words)
-    ]
-    
-    return " ".join(filtered_sentences)
