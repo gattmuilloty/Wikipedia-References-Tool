@@ -1,11 +1,13 @@
 from extractAndParse import *
-from exceptions import *
 
 def main():
-    wikiPageQuery = input('\nEnter Wikipedia page to query: ')
 
-    userContact = 'mattguilloty@gmail.com'
-    # userContact = input('\nEnter contact email for User-Agent: ')
+    # userContact = 'mattguilloty@gmail.com'
+    userContact = input('\nEnter contact email for User-Agent: ')
+    APIkey = input('\nPlease enter Google Custom Search API key: ')
+    CSEid = input('\nPlease enter Custom Search Engine ID: ')
+    
+    wikiPageQuery = input('\nEnter Wikipedia page to query: ')
 
     df = getWikiReferences(wikiPageQuery, userContact)
 
@@ -15,7 +17,7 @@ def main():
 
     totalBadLinksFound = len(df)
     
-    numCandidates = wikipediaReferenceTool(df, query)
+    numCandidates = wikipediaReferenceTool(df, query, APIkey, CSEid)
 
     print('*** Wikipedia Page Reference Tool is complete! ***\n')
 

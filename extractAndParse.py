@@ -5,6 +5,9 @@ import pandas as pd
 import time
 import chardet
 import nltk
+import pandas as pd
+from spellchecker import SpellChecker
+import spacy
 
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
@@ -295,7 +298,7 @@ def removeSentences(text, exclude_words):
 
 
 
-def wikipediaReferenceTool(df, query):
+def wikipediaReferenceTool(df, query, APIkey, CSEid):
 
     if len(df) == 1:
         print('\n' + str(len(df)) + ' bad link found\n')
@@ -349,7 +352,7 @@ def wikipediaReferenceTool(df, query):
         print('-----------------------------------------------\n')
 
         # Make Google searches based on cleaned query
-        searchesFound = googleSearch(cleanedQuery, APIkey = 'AIzaSyCh7g_k2yvQ64SYzybSHaGclZZ7FwIcBKc', CSEid = '224392473af904558')
+        searchesFound = googleSearch(cleanedQuery, APIkey, CSEid)
 
         # Remove candidates that reference Wikipedia or are in PDF format
         searchesFound = [s for s in searchesFound if 'wikipedia' not in s and 'pdf' not in s]
@@ -418,3 +421,37 @@ def wikipediaReferenceTool(df, query):
     }).to_csv('exports/wikipedia_reference_tool_candidate_URLs_' + query + '.csv', index = False)
 
     return numCandidates
+
+def fixQuery(df, query, userContact):
+
+    '''
+    Make attempts to query Wikipedia pages that exist
+
+    Args:
+        df (pandas.DataFrame OR string): Returned value from original query.
+        query (string): Query for a Wikipedia page that does not exist.
+        userContact (string): Contact email used in header for page request.
+
+    Returns:
+        pandas.DataFrame: A dataframe containing the reference data of the Wikipedia page.
+    '''
+
+    nlp = spacy.load("en_core_web_sm")
+
+    while not isinstance(df, pd.DataFrame):
+        if SpellChecker().candidates(query) is not None:
+            print('\nError. Wikipedia page does not exist! Did you mean:')
+            print(str(SpellChecker().candidates(query)) + '?\n')
+
+        else:
+            print('\nWikipedia page could not be found. Please try again.\n')
+
+        query = input('Enter Wikipedia page to query: ')
+        df = getWikiReferences(query, userContact)
+
+    query = query.replace(' ', '_')
+    
+    print('\nWikipedia Page Found!')
+    print('URL: https://en.wikipedia.org/wiki/' + query + '\n')
+
+    return(df, query)
