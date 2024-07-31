@@ -31,9 +31,9 @@ You will then be prompted to:
 
 The program will search Wikipedia to see if the article exists and grab the data from the reference section. After, it will begin checking the HTTP status codes for each reference URL. Below is an example output of getting to this point:
 
-![](images\ss1.jpg)
+![](images/ss1.jpg)
 
 Once all the reference URLs have been checked, the program will begin searching for candidate replacement links per site: 
 
-![](images\ss2.jpg)
+![](images/ss2.jpg)
 
