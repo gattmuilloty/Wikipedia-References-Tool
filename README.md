@@ -10,8 +10,10 @@ pip install requests, beautifulsoup4, pandas, chardet, nltk, sumy, pyspellchecke
 
 Finally, you will need the following:
 
-- [Custom Search JSON API](https://developers.google.com/custom-search/v1/overview)
-- [Custom Search Engine Identifier](https://programmablesearchengine.google.com/controlpanel/all)
+- [Custom Search JSON API](https://developers.google.com/custom-search/v1/overview): A unique identifier used to authenticate and authorize requests to an API.
+- [Custom Search Engine Identifier](https://programmablesearchengine.google.com/controlpanel/all) A unique code that specifies the configuration and scope of a Google Custom Search Engine.
+
+Both the API Key and CSE ID are free and quick to obtain. For Google's free Custom Search plan, a user is granted 100 searches a day, with 10 results maximum per result. From all the test runs, it seems like 10-40% of all links have undesirable HTTP status codes, so keep this in mind when wanting to fix a Wikipedia page with a lot of references.
 
 Once you have everything required, run the program by entering the following command in the directory:
 
