@@ -1,6 +1,6 @@
 # How to run Wikipedia Reference Tool
 
-This program was built using [Python 3.11](https://www.python.org/downloads/). If you encounter any issues running the program, it is recommended to use Python 3.11 to ensure compatibility.
+This program was built using [Python 3.11](https://www.python.org/downloads/). If you encounter any issues running the program, it is recommended to use this version to ensure compatibility.
 
 You will also need all the libraries from the following command:
 
@@ -60,3 +60,7 @@ The dataframe from the file has the following attributes:
 | `jaccard_index`   | The Jaccard Index between the archive text/reference description and the text of the candidate site   |
 | `levenshtein_distance`    | The Levenshtein Distance between the archive text/reference description and the text of the candidate site   |
 | `euclidean_distance`   | The Euclidean Distance between the archive text/reference description and the text of the candidate site  |
+
+If you are running the program multiple times, it may be better to make changes in `main.py` so you don't have to input your email, API Key, and CSE ID every time:
+
+![](images/ss5.jpg)

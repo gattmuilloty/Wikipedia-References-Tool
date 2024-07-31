@@ -1,8 +1,7 @@
 from extractAndParse import *
 
 def main():
-
-    # userContact = 'mattguilloty@gmail.com'
+    
     userContact = input('\nEnter contact email for User-Agent: ')
     APIkey = input('\nPlease enter Google Custom Search API key: ')
     CSEid = input('\nPlease enter Custom Search Engine ID: ')
