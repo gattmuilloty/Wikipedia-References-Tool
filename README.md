@@ -1,4 +1,6 @@
-# How to run Wikipedia Reference Tool
+# Wikipedia Reference Tool
+
+## Requirements
 
 This program was built using [Python 3.11](https://www.python.org/downloads/). If you encounter any issues running the program, it is recommended to use this version to ensure compatibility.
 
@@ -15,15 +17,13 @@ Finally, you will need the following:
 
 Both the API Key and CSE ID are free and quick to obtain. For Google's free Custom Search plan, a user is granted **100** searches a day, with **10** results maximum per result. From all the test runs, it seems like ~*10-40*% of all links have undesirable HTTP status codes, so keep this in mind when wanting to fix a Wikipedia page with a lot of references.
 
+## How to run program
+
 Once you have everything required, run the program by entering the following command in the directory:
 
 ```bash
 python .\main.py
 ```
-
-You will then be prompted to enter a Wikipedia article to fix:
-
-
 
 You will then be prompted to:
 1. Enter your email (for [User Agent](https://developer.mozilla.org/en-US/docs/Glossary/User_agent))
@@ -39,7 +39,7 @@ Once all the reference URLs have been checked, the program will begin searching 
 
 ![](images/ss2.jpg?)
 
-Once the program has searched for all candidate links, the summary will appear at the end:
+After the program has searched for all candidate links, the summary will appear at the end:
 
 ![](images/ss3.jpg)
 
@@ -63,6 +63,12 @@ The dataframe from the file has the following attributes:
 | `levenshtein_distance`    | The Levenshtein Distance between the archive text/reference description and the text of the candidate site   |
 | `euclidean_distance`   | The Euclidean Distance between the archive text/reference description and the text of the candidate site  |
 
-If you are running the program multiple times, it may be better to make changes in `main.py` so you don't have to input your email, API Key, and CSE ID every time:
+If you are running the program multiple times, it may be better to make changes in `main.py`. This way, you will not have to input your email, API Key, and CSE ID every time:
 
 ![](images/ss5.jpg)
+
+<!-- ## Examples
+
+In the `exports` folder, you'll be able to find some previous CSV files from testing the tool. 
+
+In addition, there's an explanation and demonstration of the tool here → LINK YOUTUBE VIDEO. -->
