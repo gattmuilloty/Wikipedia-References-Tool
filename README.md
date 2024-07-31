@@ -35,7 +35,7 @@ The program will search Wikipedia to see if the article exists and grab the data
 
 Once all the reference URLs have been checked, the program will begin searching for candidate replacement links per site: 
 
-![](images/ss2.jpg?)
+![](images/ss2.jpg)
 
 Once the program has searched for all candidate links, the summary will appear at the end:
 
