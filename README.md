@@ -37,3 +37,6 @@ Once all the reference URLs have been checked, the program will begin searching 
 
 ![](images/ss2.jpg)
 
+Once the program has searched for all candidate links, the summary will appear at the end:
+
+![](images/ss3.jpg)
