@@ -34,7 +34,7 @@ def getWikiReferences(pageName, contactEmail):
     url = 'https://en.wikipedia.org/wiki/' + pageName
     
     # Set User-Agent
-    headers = { 'User-Agent': f'DASC 690 - Summer 2024 ({contactEmail})' }
+    headers = { 'User-Agent': f'Wikipedia Reference Tool ({contactEmail})' }
 
     # Make request for page
     response = requests.get(url, headers = headers)
@@ -179,7 +179,7 @@ def getArchiveText(url, contactEmail):
     apiURL = f'http://archive.org/wayback/available?url={url}'
 
     # Set User-Agent
-    headers = { 'User-Agent': f'DASC 690 - Summer 2024 ({contactEmail})' }
+    headers = { 'User-Agent': f'Wikipedia Reference Tool ({contactEmail})' }
 
     # Make request for archived site
     content = requests.get(apiURL, headers = headers).json()
