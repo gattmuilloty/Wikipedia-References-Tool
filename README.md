@@ -40,3 +40,23 @@ Once all the reference URLs have been checked, the program will begin searching 
 Once the program has searched for all candidate links, the summary will appear at the end:
 
 ![](images/ss3.jpg)
+
+In the `exports` folder, a CSV file with the name: 
+`wikipedia_reference_tool_candidate_URLs_` + **`ARTICLE_NAME`** will populate. The file looks like:
+
+![](images/ss4.jpg)
+
+The dataframe from the file has the following attributes:
+
+| Atribute | Description |
+|----------|----------|
+| `reference_number`    | The reference number that has a broken link |
+| `reference`    | The text description of the reference   |
+| `URL`    | The broken link from the reference   |
+| `status`    | The HTTP status code returned from the URL   |
+| `description`    | The text description of the HTTP status code   |
+| `candidate_replacement_url`    | A potential replacement URL  |
+| `cosine_similarity`    | The Cosine Similarity between the archive text/reference description and the text of the candidate site   |
+| `jaccard_index`   | The Jaccard Index between the archive text/reference description and the text of the candidate site   |
+| `levenshtein_distance`    | The Levenshtein Distance between the archive text/reference description and the text of the candidate site   |
+| `euclidean_distance`   | The Euclidean Distance between the archive text/reference description and the text of the candidate site  |
