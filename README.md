@@ -7,7 +7,7 @@ This program was built using [Python 3.11](https://www.python.org/downloads/rele
 You will also need all the libraries from the following command:
 
 ```bash
-pip install requests, beautifulsoup4, pandas, chardet, nltk, sumy, pyspellchecker, spacy, scikit-learn, levenshtein, scipy
+pip install requests beautifulsoup4 pandas chardet nltk sumy pyspellchecker spacy scikit-learn levenshtein scipy
 ```
 
 Finally, you will need the following:
