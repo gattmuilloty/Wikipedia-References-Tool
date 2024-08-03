@@ -2,7 +2,7 @@
 
 ## Requirements
 
-This program was built using [Python 3.11](https://www.python.org/downloads/). If you encounter any issues running the program, it is recommended to use this version to ensure compatibility.
+This program was built using [Python 3.11](https://www.python.org/downloads/release/python-3110/). If you encounter any issues running the program, it is recommended to use this version to ensure compatibility.
 
 You will also need all the libraries from the following command:
 
@@ -50,7 +50,7 @@ In the `exports` folder, a CSV file with the name:
 
 The dataframe from the file has the following attributes:
 
-| Atribute | Description |
+| Attribute | Description |
 |----------|----------|
 | `reference_number`    | The reference number that has a broken link |
 | `reference`    | The text description of the reference   |
