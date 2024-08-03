@@ -67,6 +67,8 @@ If you are running the program multiple times, it may be better to make changes 
 
 ![](images/ss5.jpg)
 
+For a demonstration of how to prepare the environment and run the program, you can watch the [YouTube video](https://www.youtube.com/watch?v=gQcfLhRnTQE) that corresponds to this README file.
+
 <!-- ## Examples
 
 In the `exports` folder, you'll be able to find some previous CSV files from testing the tool. 
